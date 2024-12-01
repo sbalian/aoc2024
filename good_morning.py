@@ -3,23 +3,12 @@ import pathlib
 import click
 
 SOLUTION = """\
-import pathlib
-
-
-def part1() -> str:
-    input_ = pathlib.Path("input.txt").read_text().rstrip()
-    return input_
-
-
-def part2() -> str:
-    input_ = pathlib.Path("input.txt").read_text().rstrip()
-    return input_
+def main() -> None:
+    print("All tests passed.")
 
 
 if __name__ == "__main__":
-    assert part1() == ""
-    assert part2() == ""
-    print("All tests passed.")
+    main()
 """
 
 
