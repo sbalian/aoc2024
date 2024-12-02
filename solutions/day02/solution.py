@@ -13,9 +13,7 @@ def is_safe(report: list[int]) -> bool:
     prev_is_diff_positive: bool | None = None
     for diff in (end - start for start, end in zip(report, report[1:])):
         is_diff_positive = diff > 0
-        if diff == 0:
-            return False
-        elif not (0 < abs(diff) < 4):
+        if not (0 < abs(diff) < 4):
             return False
         elif prev_is_diff_positive is None:
             prev_is_diff_positive = is_diff_positive
