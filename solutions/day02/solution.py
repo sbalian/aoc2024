@@ -1,5 +1,4 @@
 import copy
-import math
 import pathlib
 
 
@@ -11,16 +10,16 @@ def get_reports(path: pathlib.Path) -> list[list[int]]:
 
 
 def is_safe(report: list[int]) -> bool:
-    prev_sign_diff: int | None = None
+    prev_is_diff_positive: bool | None = None
     for diff in (end - start for start, end in zip(report, report[1:])):
-        sign_diff = int(math.copysign(1, diff))
+        is_diff_positive = diff > 0
         if diff == 0:
             return False
         elif not (0 < abs(diff) < 4):
             return False
-        elif prev_sign_diff is None:
-            prev_sign_diff = sign_diff
-        elif prev_sign_diff != sign_diff:
+        elif prev_is_diff_positive is None:
+            prev_is_diff_positive = is_diff_positive
+        elif prev_is_diff_positive != is_diff_positive:
             return False
     return True
 
