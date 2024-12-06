@@ -17,7 +17,7 @@ def num_xmas_for_vector(vector: np.ndarray) -> int:
     return len(re.findall(XMAS, "".join(vector)))
 
 
-def part1(matrix: np.ndarray):
+def part1(matrix: np.ndarray) -> int:
     n, m = matrix.shape
     if n != m:
         raise ValueError("non-square matrix")
