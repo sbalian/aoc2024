@@ -38,7 +38,7 @@ def move(blocks: list[int | None]):
     return blocks
 
 
-def print_disk_map(blocks: list[int | None]) -> None:
+def print_blocks(blocks: list[int | None]) -> None:
     to_print = ""
     for block in blocks:
         if block is None:
