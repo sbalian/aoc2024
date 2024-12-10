@@ -1,3 +1,4 @@
+import collections
 import pathlib
 
 
@@ -38,16 +39,6 @@ def move(blocks: list[int | None]):
     return blocks
 
 
-def print_blocks(blocks: list[int | None]) -> None:
-    to_print = ""
-    for block in blocks:
-        if block is None:
-            to_print += "."
-        else:
-            to_print += str(block)
-    print(to_print)
-
-
 def checksum(blocks: list[int | None]) -> int:
     return sum(i * block for i, block in enumerate(blocks) if block is not None)
 
@@ -58,12 +49,47 @@ def part1(disk_map: str) -> int:
     return checksum(blocks)
 
 
+def part2(disk_map: str) -> int:
+    blocks = make_blocks(disk_map)
+    file_start: dict[int, int] = {}
+    file_length: dict[int, int] = collections.defaultdict(int)
+    spaces: list[list[int]] = []
+    space: list[int] = []
+    for i, block in enumerate(blocks):
+        if block is None:
+            space.append(i)
+        else:
+            if space:
+                spaces.append(space)
+            space = []
+            if block not in file_start:
+                file_start[block] = i
+            file_length[block] += 1
+
+    for file in reversed(file_start):
+        for space in spaces:
+            if file_length[file] <= len(space) and space[0] <= file_start[file]:
+                c = 0
+                for i in range(file_start[file], file_start[file] + file_length[file]):
+                    blocks[i] = None
+                    blocks[space[c]] = file
+                    c += 1
+                for _ in range(c):
+                    space.pop(0)
+                break
+        if not space:
+            spaces.remove(space)
+    return checksum(blocks)
+
+
 def main() -> None:
     disk_map = read_disk_map(pathlib.Path("example.txt"))
     assert part1(disk_map) == 1928
+    assert part2(disk_map) == 2858
 
     disk_map = read_disk_map(pathlib.Path("input.txt"))
     assert part1(disk_map) == 6421128769094
+    assert part2(disk_map) == 6448168620520
 
     print("All tests passed.")
 
