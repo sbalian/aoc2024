@@ -56,7 +56,7 @@ class Map:
                     zeros.append(point)
         return zeros
 
-    def bfs_score(self, source: Point) -> int:
+    def bfs(self, source: Point, rating) -> int:
         score = 0
         visited = set([source])
         queue = deque([source])
@@ -65,21 +65,11 @@ class Map:
             for neighbor in self.get_neighbors(current):
                 if neighbor not in visited and (self[neighbor] - self[current]) == 1:
                     queue.append(neighbor)
-                    visited.add(neighbor)
+                    if not rating:
+                        visited.add(neighbor)
                     if self[neighbor] == 9:
                         score += 1
         return score
-
-    def bfs_rating(self, source: Point) -> int:
-        queue = deque([[source]])
-        paths = []
-        while queue:
-            current = queue.popleft()
-            for neighbor in self.get_neighbors(current[-1]):
-                if (self[neighbor] - self[current[-1]]) == 1:
-                    path = list(current) + [neighbor]
-                    paths.append(path) if self[neighbor] == 9 else queue.append(path)
-        return len(paths)
 
     def __str__(self) -> str:
         content = ""
@@ -88,23 +78,24 @@ class Map:
             content += "\n"
         return content.rstrip()
 
+    def _solve(self, rating: bool) -> int:
+        return sum(self.bfs(zero, rating=rating) for zero in self.find_zeros())
 
-def part1(map: Map):
-    return sum(map.bfs_score(zero) for zero in map.find_zeros())
+    def part1(self) -> int:
+        return self._solve(rating=False)
 
-
-def part2(map: Map):
-    return sum(map.bfs_rating(zero) for zero in map.find_zeros())
+    def part2(self) -> int:
+        return self._solve(rating=True)
 
 
 def main() -> None:
     map = Map.from_file(Path("example.txt"))
-    assert part1(map) == 36
-    assert part2(map) == 81
+    assert map.part1() == 36
+    assert map.part2() == 81
 
     map = Map.from_file(Path("input.txt"))
-    assert part1(map) == 825
-    assert part2(map) == 1805
+    assert map.part1() == 825
+    assert map.part2() == 1805
 
     print("All tests passed.")
 
