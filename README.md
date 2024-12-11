@@ -10,7 +10,7 @@ To start a new day:
 uv run good_morning.py
 ```
 
-To run the solution for a particular day:
+To run the solutions for a particular day:
 
 ```bash
 cd solutions/day01 && uv run solution.py && cd ../..
