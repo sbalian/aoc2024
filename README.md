@@ -17,4 +17,8 @@ cd solutions/day01
 uv run solution.py
 ```
 
-<!-- - To run all the solutions: `uv run all.py` -->
+To run all the solutions:
+
+```bash
+uv run merry_christmas.py
+```
