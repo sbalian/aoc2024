@@ -3,6 +3,8 @@ import pathlib
 from enum import Enum, auto
 from typing import NamedTuple
 
+import tqdm
+
 
 class Equation(NamedTuple):
     id: int
@@ -61,9 +63,13 @@ def part1(equations: list[Equation]) -> set[Equation]:
     return valid_
 
 
-def part2(equations: list[Equation], already_valid: set[Equation]) -> set[Equation]:
+def part2(
+    equations: list[Equation],
+    already_valid: set[Equation],
+    disable_progress: bool = False,
+) -> set[Equation]:
     valid_: set[Equation] = set()
-    for equation in equations:
+    for equation in tqdm.tqdm(equations, disable=disable_progress):
         if equation in already_valid or valid(equation, include_concat=True):
             valid_.add(equation)
     return valid_
@@ -77,7 +83,9 @@ def main() -> None:
     equations = read_equations(pathlib.Path("example.txt"))
     valid_from_part1 = part1(equations)
     assert sum_targets(valid_from_part1) == 3749
-    assert sum_targets(part2(equations, valid_from_part1)) == 11387
+    assert (
+        sum_targets(part2(equations, valid_from_part1, disable_progress=True)) == 11387
+    )
 
     equations = read_equations(pathlib.Path("input.txt"))
     valid_from_part1 = part1(equations)
