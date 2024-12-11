@@ -13,8 +13,7 @@ uv run good_morning.py
 To run the solution for a particular day:
 
 ```bash
-cd solutions/day01
-uv run solution.py
+cd solutions/day01 && uv run solution.py && cd ../..
 ```
 
 To run all the solutions:
