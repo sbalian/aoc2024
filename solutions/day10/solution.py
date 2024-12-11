@@ -56,7 +56,7 @@ class Map:
                     zeros.append(point)
         return zeros
 
-    def bfs(self, source: Point, rating) -> int:
+    def bfs(self, source: Point, rating: bool) -> int:
         score = 0
         visited = set([source])
         queue = deque([source])
