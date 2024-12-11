@@ -5,8 +5,8 @@ def read(arrangement: str) -> list[int]:
     return [int(stone) for stone in arrangement.split()]
 
 
-def blink(stone_counts: dict[int, int]) -> dict[int, int]:
-    next_counts: dict[int, int] = defaultdict(int)
+def blink(stone_counts: defaultdict[int, int]) -> defaultdict[int, int]:
+    next_counts = defaultdict[int, int](int)
     for stone, count in stone_counts.items():
         if count > 0:
             next_counts[stone] = count
@@ -30,7 +30,7 @@ def blink(stone_counts: dict[int, int]) -> dict[int, int]:
 
 
 def blink_many_times(stones: list[int], n: int) -> int:
-    stone_counts: dict[int, int] = defaultdict(int)
+    stone_counts = defaultdict[int, int](int)
     for stone in stones:
         stone_counts[stone] += 1
     for _ in range(n):

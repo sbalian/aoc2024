@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import collections
 import pathlib
+from collections import defaultdict
 
 
 class PageNumber:
@@ -40,7 +40,7 @@ def read_updates_and_set_rules(path: pathlib.Path) -> list[Update]:
             rules.append((x, y))
         else:
             updates.append(Update([PageNumber(value) for value in line.split(",")]))
-    rules_dict = collections.defaultdict(list)
+    rules_dict = defaultdict[str, list[str]](list)
     for x, y in rules:
         rules_dict[x].append(y)
     PageNumber.rules = rules_dict

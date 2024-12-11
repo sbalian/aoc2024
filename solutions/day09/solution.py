@@ -1,5 +1,5 @@
-import collections
 import pathlib
+from collections import defaultdict
 
 
 def read_disk_map(path: pathlib.Path) -> str:
@@ -52,7 +52,7 @@ def part1(disk_map: str) -> int:
 def part2(disk_map: str) -> int:
     blocks = make_blocks(disk_map)
     file_start: dict[int, int] = {}
-    file_length: dict[int, int] = collections.defaultdict(int)
+    file_length = defaultdict[int, int](int)
     spaces: list[list[int]] = []
     space: list[int] = []
     for i, block in enumerate(blocks):

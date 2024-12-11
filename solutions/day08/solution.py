@@ -72,8 +72,8 @@ def part2(
             j += 1
 
 
-def find_antenna_positions(grid: list[list[str]]) -> dict[str, list[Point]]:
-    positions: dict[str, list[Point]] = defaultdict(list[Point])
+def find_antenna_positions(grid: list[list[str]]) -> defaultdict[str, list[Point]]:
+    positions = defaultdict[str, list[Point]](list[Point])
     rows = len(grid)
     cols = len(grid[0])
     for i in range(rows):
@@ -84,7 +84,7 @@ def find_antenna_positions(grid: list[list[str]]) -> dict[str, list[Point]]:
 
 
 def solve(
-    antenna_positions: dict[str, list[Point]],
+    antenna_positions: defaultdict[str, list[Point]],
     rows: int,
     cols: int,
     solver: Callable[[list[Point], int, int, set[Point]], None],
