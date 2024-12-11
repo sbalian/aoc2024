@@ -79,7 +79,7 @@ def worker(start: Point, grid: Grid, obstruction: Point) -> int:
         return 1
 
 
-def part2(path: pathlib.Path) -> int:
+def part2(path: pathlib.Path, disable_progress: bool = False) -> int:
     # NOTE this can be solved more efficiently by jumping between obstructions, but
     # this brute-force method takes only ~ 15 seconds on my 20 core machine.
 
@@ -93,14 +93,18 @@ def part2(path: pathlib.Path) -> int:
     worker_ = partial(worker, start_, grid)
     with concurrent.futures.ProcessPoolExecutor() as executor:
         return sum(
-            tqdm.tqdm(executor.map(worker_, obstructions), total=len(obstructions))
+            tqdm.tqdm(
+                executor.map(worker_, obstructions),
+                total=len(obstructions),
+                disable=disable_progress,
+            )
         )
 
 
 def main() -> None:
     assert part1(pathlib.Path("example.txt")) == 41
     assert part1(pathlib.Path("input.txt")) == 5086
-    assert part2(pathlib.Path("example.txt")) == 6
+    assert part2(pathlib.Path("example.txt"), disable_progress=True) == 6
     assert part2(pathlib.Path("input.txt")) == 1770
     print("All tests passed.")
 
