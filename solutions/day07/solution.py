@@ -56,7 +56,7 @@ def read_equations(path: pathlib.Path) -> list[Equation]:
 
 
 def part1(equations: list[Equation]) -> set[Equation]:
-    valid_: set[Equation] = set()
+    valid_ = set[Equation]()
     for equation in equations:
         if valid(equation):
             valid_.add(equation)
@@ -68,7 +68,7 @@ def part2(
     already_valid: set[Equation],
     disable_progress: bool = False,
 ) -> set[Equation]:
-    valid_: set[Equation] = set()
+    valid_ = set[Equation]()
     for equation in tqdm.tqdm(equations, disable=disable_progress):
         if equation in already_valid or valid(equation, include_concat=True):
             valid_.add(equation)

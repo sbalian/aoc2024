@@ -38,8 +38,8 @@ def new_grid(grid: Grid, obstruction: Point) -> Grid:
 def walk(grid: Grid, start: Point) -> set[Point]:
     position = start
     momentum: Point = (-1, 0)
-    visited: set[Point] = set([position])
-    visited_with_momentum: set[tuple[Point, Point]] = set([(position, momentum)])
+    visited = set[Point]([position])
+    visited_with_momentum = set[tuple[Point, Point]]([(position, momentum)])
 
     while True:
         next_position = add(position, momentum)

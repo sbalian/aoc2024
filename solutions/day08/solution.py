@@ -89,7 +89,7 @@ def solve(
     cols: int,
     solver: Callable[[list[Point], int, int, set[Point]], None],
 ) -> int:
-    antinodes: set[Point] = set()
+    antinodes = set[Point]()
     for positions in antenna_positions.values():
         solver(positions, rows, cols, antinodes)
     return len(antinodes)

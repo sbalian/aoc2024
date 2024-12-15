@@ -58,8 +58,8 @@ class Map:
 
     def bfs(self, source: Point, rating: bool) -> int:
         score = 0
-        visited = set([source])
-        queue = deque([source])
+        visited = set[Point]([source])
+        queue = deque[Point]([source])
         while queue:
             current = queue.popleft()
             for neighbor in self.get_neighbors(current):
