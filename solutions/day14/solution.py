@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from collections import defaultdict
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -11,6 +12,73 @@ class Vector:
 
     def __add__(self, other: Vector) -> Vector:
         return Vector(self.x + other.x, self.y + other.y)
+
+
+@dataclass
+class Robot:
+    position: Vector
+    velocity: Vector
+
+
+class World:
+    def __init__(self, path: Path, width: int, height: int) -> None:
+        self.width, self.height = width, height
+        self.robots: list[Robot] = []
+        for line in path.read_text().rstrip().splitlines():
+            left, right = line.split()
+            x, y = left.split("p=")[-1].split(",")
+            position = Vector(int(x), int(y))
+            vx, vy = right.split("v=")[-1].split(",")
+            velocity = Vector(int(vx), int(vy))
+            self.robots.append(Robot(position=position, velocity=velocity))
+        self.positions = defaultdict[Vector, int](int)
+        for robot in self.robots:
+            self.positions[robot.position] += 1
+
+    def evolve(self, steps: int = 1) -> None:
+        for robot in self.robots:
+            self.positions[robot.position] -= 1
+            robot.position = Vector(
+                x=(robot.position.x + steps * robot.velocity.x) % self.width,
+                y=(robot.position.y + steps * robot.velocity.y) % self.height,
+            )
+            self.positions[robot.position] += 1
+
+    def safety_factors(self) -> tuple[int, int, int, int]:
+        mid_width, mid_height, a, b, c, d = (
+            self.width // 2,
+            self.height // 2,
+            0,
+            0,
+            0,
+            0,
+        )
+        for robot in self.robots:
+            position = robot.position
+            if position.x < mid_width and position.y < mid_height:
+                a += 1
+            elif position.x < mid_width and position.y > mid_height:
+                c += 1
+            elif position.x > mid_width and position.y > mid_height:
+                d += 1
+            elif position.x > mid_width and position.y < mid_height:
+                b += 1
+        return a, b, c, d
+
+    def safety_factor(self) -> int:
+        a, b, c, d = self.safety_factors()
+        return a * b * c * d
+
+    def show(self) -> None:
+        for y in range(self.height):
+            row = ""
+            for x in range(self.width):
+                tiles = self.positions[Vector(x, y)]
+                if tiles == 0:
+                    row += "."
+                else:
+                    row += str(tiles)
+            print(row)
 
 
 def read(path: Path) -> list[tuple[Vector, Vector]]:
@@ -26,22 +94,9 @@ def read(path: Path) -> list[tuple[Vector, Vector]]:
 
 
 def part1(path: Path, width: int, height: int) -> int:
-    data = read(path)
-    final_pos = [
-        Vector((pos.x + 100 * vel.x) % width, (pos.y + 100 * vel.y) % height)
-        for pos, vel in data
-    ]
-    mid_width, mid_height, a, b, c, d = width // 2, height // 2, 0, 0, 0, 0
-    for pos in final_pos:
-        if pos.x < mid_width and pos.y < mid_height:
-            a += 1
-        elif pos.x < mid_width and pos.y > mid_height:
-            b += 1
-        elif pos.x > mid_width and pos.y > mid_height:
-            c += 1
-        elif pos.x > mid_width and pos.y < mid_height:
-            d += 1
-    return a * b * c * d
+    world = World(path, width, height)
+    world.evolve(100)
+    return world.safety_factor()
 
 
 def main() -> None:
