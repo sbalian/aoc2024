@@ -44,7 +44,7 @@ class World:
             )
             self.positions[robot.position] += 1
 
-    def safety_factors(self) -> tuple[int, int, int, int]:
+    def quadrant_counts(self) -> tuple[int, int, int, int]:
         mid_width, mid_height, a, b, c, d = (
             self.width // 2,
             self.height // 2,
@@ -66,7 +66,7 @@ class World:
         return a, b, c, d
 
     def safety_factor(self) -> int:
-        a, b, c, d = self.safety_factors()
+        a, b, c, d = self.quadrant_counts()
         return a * b * c * d
 
     def show(self) -> None:
@@ -75,7 +75,7 @@ class World:
             for x in range(self.width):
                 tiles = self.positions[Vector(x, y)]
                 if tiles == 0:
-                    row += "."
+                    row += " "
                 else:
                     row += str(tiles)
             print(row)
@@ -99,10 +99,24 @@ def part1(path: Path, width: int, height: int) -> int:
     return world.safety_factor()
 
 
+def part2(path: Path, width: int, height: int) -> None:
+    world = World(path, width, height)
+    t = 81
+    dt = 101
+    world.evolve(t)
+    while True:
+        print(f"{t=}")
+        world.show()
+        input()
+        world.evolve(dt)
+        t += dt
+
+
 def main() -> None:
     assert part1(Path("example.txt"), 11, 7) == 12
     assert part1(Path("input.txt"), 101, 103) == 221655456
     print("All tests passed.")
+    # part2(Path("input.txt"), 101, 103)  #  ... you will see it at t=7858
 
 
 if __name__ == "__main__":
